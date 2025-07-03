@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { ShoppingCart, Search, User, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // 👈 import auth context
+import { useCart } from "../context/CartContext";
 
-export default function Navbar({ setIsCartOpen, getTotalItems }) {
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useAuth(); // 👈 get user & logout
+  const { getTotalItems } = useCart();
 
   return (
     <>
@@ -45,8 +49,8 @@ export default function Navbar({ setIsCartOpen, getTotalItems }) {
               </div>
 
               <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => setIsCartOpen(true)}
+                <Link
+                  to="/cart"
                   className="relative p-2 hover:text-purple-300 transition-all duration-300 transform hover:scale-110 group"
                 >
                   <ShoppingCart className="h-6 w-6" />
@@ -55,30 +59,44 @@ export default function Navbar({ setIsCartOpen, getTotalItems }) {
                       {getTotalItems()}
                     </span>
                   )}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-400/20 to-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </button>
-                <Link
-                  to="/profile"
-                  className="relative p-2 hover:text-purple-300 transition-all duration-300 transform hover:scale-110 group"
-                >
-                  <User className="h-6 w-6" />
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-400/20 to-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
+
+                {/* Auth Links */}
+                {!user ? (
+                  <>
+                    <Link to="/signin" className="hover:text-purple-300">
+                      Signin
+                    </Link>
+                    <Link to="/signup" className="hover:text-purple-300">
+                      Signup
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/profile" className="hover:text-purple-300">
+                      Profile
+                    </Link>
+                    <button onClick={logout} className="hover:text-purple-300">
+                      Logout
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
             <div className="lg:hidden flex items-center space-x-2">
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="relative p-2 hover:bg-white/10 rounded-full transition-colors"
+              <Link
+                to="/cart"
+                className="relative p-2 hover:text-purple-300 transition-all duration-300 transform hover:scale-110 group"
               >
                 <ShoppingCart className="h-6 w-6" />
                 {getTotalItems() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">
                     {getTotalItems()}
                   </span>
                 )}
-              </button>
+              </Link>
+
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="p-2 hover:bg-white/10 rounded-full transition-colors"
@@ -124,20 +142,45 @@ export default function Navbar({ setIsCartOpen, getTotalItems }) {
               >
                 Products
               </Link>
-              <Link
-                to="/cart"
-                className="block text-white hover:text-purple-300 py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Cart
-              </Link>
-              <Link
-                to="/profile"
-                className="block text-white hover:text-purple-300 py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Profile
-              </Link>
+
+              {/* Mobile Auth Links */}
+              {!user ? (
+                <>
+                  <Link
+                    to="/signin"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-white hover:text-purple-300"
+                  >
+                    Signin
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-white hover:text-purple-300"
+                  >
+                    Signup
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/profile"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-white hover:text-purple-300"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="block text-white hover:text-purple-300"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

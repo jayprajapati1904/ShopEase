@@ -4,26 +4,33 @@ import {
   Heart,
   Star,
   ArrowRight,
-  Search,
-  User,
+  Zap,
+  Clock,
+  X,
+  Plus,
+  Minus,
   Truck,
   Shield,
   RefreshCw,
   Headphones,
-  X,
-  Plus,
-  Minus,
-  Zap,
-  Clock,
 } from "lucide-react";
-import Navbar from "./navbar";
+import { useCart } from "../context/CartContext";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [cartItems, setCartItems] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [currentDealIndex, setCurrentDealIndex] = useState(0);
+
+  const {
+    cartItems,
+    isCartOpen,
+    setIsCartOpen,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    getTotalPrice,
+    getTotalItems,
+  } = useCart();
 
   const heroSlides = [
     {
@@ -119,7 +126,7 @@ export default function Home() {
       price: 45,
       originalPrice: 65,
       image:
-        "https://images.unsplash.com/photo-1609592806374-b3eefb1b6b5b?w=300&h=300&fit=crop",
+        "https://www.status.co/cdn/shop/files/Status_Wirelesss-Charger_solo-charger.jpg?v=1698444597",
       rating: 4.4,
       reviews: 567,
       badge: "Eco-Friendly",
@@ -207,44 +214,6 @@ export default function Home() {
     return () => clearInterval(dealTimer);
   }, []);
 
-  const addToCart = (product) => {
-    setCartItems((prev) => {
-      const existingItem = prev.find((item) => item.id === product.id);
-      if (existingItem) {
-        return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [...prev, { ...product, quantity: 1 }];
-    });
-
-    const button = document.getElementById(`cart-btn-${product.id}`);
-    if (button) {
-      button.classList.add("animate-pulse");
-      setTimeout(() => button.classList.remove("animate-pulse"), 600);
-    }
-  };
-
-  const removeFromCart = (productId) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== productId));
-  };
-
-  const updateQuantity = (productId, change) => {
-    setCartItems((prev) =>
-      prev
-        .map((item) => {
-          if (item.id === productId) {
-            const newQuantity = item.quantity + change;
-            return newQuantity > 0 ? { ...item, quantity: newQuantity } : item;
-          }
-          return item;
-        })
-        .filter((item) => item.quantity > 0)
-    );
-  };
-
   const toggleFavorite = (productId) => {
     setFavorites((prev) =>
       prev.includes(productId)
@@ -253,21 +222,8 @@ export default function Home() {
     );
   };
 
-  const getTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
-  };
-
-  const getTotalItems = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
-  };
-
   return (
     <div className="min-h-screen bg-white">
-      <Navbar setIsCartOpen={setIsCartOpen} getTotalItems={getTotalItems} />
-
       {/* Cart Sidebar */}
       {isCartOpen && (
         <div
@@ -311,7 +267,7 @@ export default function Home() {
                       <div className="flex-1">
                         <h3 className="font-semibold text-sm">{item.name}</h3>
                         <p className="text-purple-600 font-bold">
-                          ${item.price}
+                          ₹{item.price}
                         </p>
                         <div className="flex items-center space-x-2 mt-2">
                           <button
@@ -348,7 +304,7 @@ export default function Home() {
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-semibold">Total:</span>
                   <span className="text-2xl font-bold text-purple-600">
-                    ${getTotalPrice().toFixed(2)}
+                    ₹{getTotalPrice().toFixed(2)}
                   </span>
                 </div>
                 <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
@@ -447,10 +403,10 @@ export default function Home() {
                 <h3 className="font-semibold mb-2">{deal.name}</h3>
                 <div className="flex items-center space-x-2 mb-4">
                   <span className="text-2xl font-bold text-red-500">
-                    ${deal.price}
+                    ₹{deal.price}
                   </span>
                   <span className="text-gray-400 line-through">
-                    ${deal.originalPrice}
+                    ₹{deal.originalPrice}
                   </span>
                 </div>
                 <button
@@ -573,16 +529,15 @@ export default function Home() {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
                       <span className="text-2xl font-bold text-purple-600">
-                        ${product.price}
+                        ₹{product.price}
                       </span>
                       <span className="text-lg text-gray-400 line-through">
-                        ${product.originalPrice}
+                        ₹{product.originalPrice}
                       </span>
                     </div>
                   </div>
 
                   <button
-                    id={`cart-btn-${product.id}`}
                     onClick={() => addToCart(product)}
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center space-x-2"
                   >
@@ -746,7 +701,10 @@ export default function Home() {
                   placeholder="Enter your email"
                   className="bg-white/10 text-white placeholder-gray-300 rounded-l-full px-4 py-2 w-full focus:outline-none"
                 />
-                <button className="bg-purple-600 text-white px-4 rounded-r-full hover:bg-purple-700">
+                <button
+                  className="bg-purple-600 text-white px-#pragma once
+4 rounded-r-full hover:bg-purple-700"
+                >
                   Subscribe
                 </button>
               </div>
