@@ -101,9 +101,13 @@ export default function CartPage() {
                 <span>₹{getTotalPrice().toFixed(2)}</span>
               </div>
             </div>
-            <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-full font-semibold mt-6 hover:shadow-lg">
+            <Link
+              to="/checkout"
+              className="block w-full text-center bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-full font-semibold mt-6 hover:shadow-lg"
+            >
               Proceed to Checkout
-            </button>
+            </Link>
+
             <Link
               to="/products"
               className="block text-center text-purple-600 mt-4 hover:underline"

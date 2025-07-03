@@ -1,14 +1,14 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import useAuthStore from "../context/authStore.js";
 
 const SignIn = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
-  const { checkAuth } = useAuth();
+  const { checkAuth } = useAuthStore();
   const navigate = useNavigate();
 
   const validateForm = () => {

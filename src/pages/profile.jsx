@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import useAuthStore from "../context/authStore.js";
+
 import api from "../api/axios";
 import { User, Mail, Settings, LogOut, Edit, Loader } from "lucide-react";
 
 const Profile = () => {
-  const { user, getProfile, logout } = useAuth();
+  const { user, checkAuth, logout } = useAuthStore();
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -18,7 +20,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        await getProfile();
+        await checkAuth();
       } catch (err) {
         setError("Failed to fetch profile. Redirecting to sign-in...");
         setTimeout(() => {
@@ -28,7 +30,7 @@ const Profile = () => {
     };
 
     fetchProfile();
-  }, [getProfile, navigate]);
+  }, [checkAuth, navigate]);
 
   useEffect(() => {
     if (user !== null) {
@@ -224,7 +226,7 @@ const Profile = () => {
                       <div>
                         <p className="text-sm text-gray-500">Username</p>
                         <p className="font-medium text-gray-800">
-                          {user.username || "Not set"}
+                          {user?.username || "Not set"}
                         </p>
                       </div>
                     </div>
@@ -236,7 +238,7 @@ const Profile = () => {
                       <div>
                         <p className="text-sm text-gray-500">Email</p>
                         <p className="font-medium text-gray-800">
-                          {user.email || "Not set"}
+                          {user?.email || "Not set"}
                         </p>
                       </div>
                     </div>

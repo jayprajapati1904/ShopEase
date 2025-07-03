@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { ShoppingCart, Search, User, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // 👈 import auth context
+import useAuthStore from "../context/AuthStore.js"; // 👈 import auth context
 import { useCart } from "../context/CartContext";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, logout } = useAuth(); // 👈 get user & logout
+  const { user, logout } = useAuthStore(); // 👈 get user & logout
   const { getTotalItems } = useCart();
 
   return (

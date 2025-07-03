@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import useAuthStore from "../context/authStore.js";
 
 const SignUp = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -12,7 +12,7 @@ const SignUp = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
-  const { checkAuth } = useAuth();
+  const { checkAuth } = useAuthStore();
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -55,6 +55,7 @@ const SignUp = () => {
 
     try {
       setIsLoading(true);
+      console.log(form);
       await api.post("/auth/signup", form);
       await checkAuth();
       navigate("/profile");
