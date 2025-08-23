@@ -3,7 +3,7 @@ import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { loadRazorpayScript } from "../utils/loadRazorpay";
-import useAuthStore from "../context/authStore.js";
+import useAuthStore from "../context/AuthStore.js";
 
 export default function CheckoutPage() {
   const { cartItems, getTotalPrice, clearCart } = useCart();

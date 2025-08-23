@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../context/authStore.js";
+import useAuthStore from "../context/AuthStore.js";
 
 import api from "../api/axios";
 import { User, Mail, Settings, LogOut, Edit, Loader } from "lucide-react";

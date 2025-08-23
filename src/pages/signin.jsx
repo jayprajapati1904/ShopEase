@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../context/authStore.js";
+import useAuthStore from "../context/AuthStore.js";
 
 const SignIn = () => {
   const [form, setForm] = useState({ email: "", password: "" });
