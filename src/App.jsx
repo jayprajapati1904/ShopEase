@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import useAuthStore from "./context/authStore.js";
+import useAuthStore from "./context/AuthStore.js";
 import Home from "./components/home";
 import ProductPage from "./components/product";
 import Navbar from "./components/navbar";
